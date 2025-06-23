@@ -1,0 +1,12 @@
+.app {
+  padding: 30px;
+  display: flex;
+
+}
+
+.app > div {
+  margin-right: 50px;
+  background-color: #628eae;
+  padding: 20px;
+  border-radius: 5px;
+}
