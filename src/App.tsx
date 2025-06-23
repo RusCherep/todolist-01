@@ -18,6 +18,7 @@ export function App() {
         ])
 //UI
 
+
     const [filter, setFilter] = useState<FilterValues>("All")
 
     let filteretdTasks = tasks;
