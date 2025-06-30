@@ -1,9 +1,10 @@
 import {ButtonTemplate} from "./Button.tsx";
 import {FilterValues} from "./App.tsx";
+import {useRef} from "react";
 
 
 export type Task = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 
@@ -14,17 +15,25 @@ type Props = {
     title: string
     tasks: Task[]
     deleteTasks: (taskId: Task["id"]) => void
+    createTask:(title:string)=>void;
     changeToDoListFilter:(nextFilter:FilterValues)=>void
+
 }
 
 
-export const ToDoList = ({title, tasks, deleteTasks, changeToDoListFilter}: Props) => {
+export const ToDoListItemRef = ({title, tasks, deleteTasks, changeToDoListFilter, createTask}: Props) => {
+    const inputRef = useRef<HTMLInputElement>(null)
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input/>
-                <ButtonTemplate title={"+"}/>
+                <input ref={inputRef}/>
+                <ButtonTemplate title={"+"} onClickHandler={()=>{
+                    if(inputRef.current) {
+                        createTask(inputRef.current.value);
+                        inputRef.current.value="";
+                    }
+                }}/>
             </div>
 
             {tasks.length === 0
