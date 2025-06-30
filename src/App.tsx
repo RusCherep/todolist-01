@@ -37,10 +37,10 @@ export function App() {
     let filteretdTasks = tasks;
 
     if (filter === "Active"){
-        filteretdTasks = tasks.filter(t=>t.isDone === false)
+        filteretdTasks = tasks.filter(t=>!t.isDone)
     }
     if (filter === "Completed"){
-        filteretdTasks = tasks.filter(t=>t.isDone === true)
+        filteretdTasks = tasks.filter(t=>t.isDone)
     }
 
     const changeToDoListFilter = (nextFilter:FilterValues)=>{
