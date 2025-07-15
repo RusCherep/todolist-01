@@ -10,3 +10,22 @@
   padding: 20px;
   border-radius: 5px;
 }
+.task{
+  font-weight:bold;
+}
+
+.task-done{
+  opacity:0.5;
+  text-decoration: line-through;
+}
+.btn-filter-active{
+  background-color: rgba(130, 14, 207, 0.95);
+  border: 2px solid rgba(130, 14, 207, 0.95);
+  border-radius: 5px;
+  color: white;
+
+}
+.error{
+  border: 2px solid red;
+  outline:none;
+}
