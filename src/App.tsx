@@ -2,6 +2,7 @@ import './App.css'
 import {useState} from "react";
 import {v1} from "uuid";
 import {Task, ToDoList} from "./ToDoListOnChange.tsx";
+import {CreateItemForm} from "./CreateItemForm.tsx";
 
 export type FilterValues = "All" | "Active" | "Completed"
 
@@ -70,6 +71,14 @@ export function App() {
             ...tasks,
             [todolistId]: tasks[todolistId].map(t => t.id === taskId ? {...t, isDone: newStatus} : t)
         })
+    }
+
+    const changeTaskTitle = (taskId: Task["id"], newTitle: Task["title"], todolistId: TodolistType["id"]) => {
+
+        setTasks({
+            ...tasks,
+            [todolistId]: tasks[todolistId].map(t => t.id === taskId ? {...t, title: newTitle} : t)
+        })
 
     }
 
@@ -87,7 +96,12 @@ export function App() {
     }
 
     const changeToDoListFilter = (nextFilter: FilterValues, todolistId: TodolistType["id"]) => {
-        const nextState = todoLists.map(tl => tl.id === todolistId ? {...tl, filter:nextFilter} : tl)
+        const nextState = todoLists.map(tl => tl.id === todolistId ? {...tl, filter: nextFilter} : tl)
+        setTodoLists(nextState)
+    }
+
+    const changeToDoListTitle = (nextTitle: TodolistType["title"], todolistId: TodolistType["id"]) => {
+        const nextState = todoLists.map(tl => tl.id === todolistId ? {...tl, title: nextTitle} : tl)
         setTodoLists(nextState)
     }
 
@@ -98,6 +112,19 @@ export function App() {
     const deleteTodolist = (todolistId: TodolistType["id"]) => {
         const nextState = todoLists.filter(tl => tl.id !== todolistId)
         setTodoLists(nextState)
+    }
+
+    const createTodolist = (title: string) => {
+        // {id: v1(), title: 'HTML&CSS', isDone: true},
+        const newTodolistID = v1();
+        const newTodolist: TodolistType = {
+            id: newTodolistID,
+            title: title,
+            filter: "All"
+        }
+        const nextState = [...todoLists, newTodolist]
+        setTodoLists(nextState)
+        setTasks({...tasks, [newTodolistID]: []})
     }
 
 
@@ -122,6 +149,8 @@ export function App() {
             deleteTasks={deleteTasks}
             deleteTodolist={deleteTodolist}
             changeToDoListFilter={changeToDoListFilter}
+            changeTaskTitle={changeTaskTitle}
+            changeToDoListTitle={changeToDoListTitle}
             createTask={createTask}
             changeTaskStatus={changeTaskStatus}
             // deleteAllTasks={deleteAllTasks}
@@ -132,6 +161,8 @@ export function App() {
 
     return (
         <div className="app">
+
+            <CreateItemForm createItem={createTodolist} maxItemTitleLength={15}/>
             {todolistsComponents}
         </div>
     )
