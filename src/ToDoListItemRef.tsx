@@ -1,6 +1,7 @@
 import {ButtonTemplate} from "./Button.tsx";
 import {FilterValues} from "./App.tsx";
 import {useRef} from "react";
+import {Button, Checkbox, List} from "@mui/material";
 
 
 export type Task = {
@@ -41,24 +42,30 @@ export const ToDoListItemRef = ({title, tasks, deleteTasks, changeToDoListFilter
                     <p>Тасок нет</p>
                 )
                 : (
-                    <ul>
+                    <List>
                         {tasks.map(task => {
                             return (
                                 <li key={task.id}>
-                                    <input type="checkbox" checked={task.isDone}/>
+                                    {/*<input type="checkbox" checked={task.isDone}/>*/}
+                                    <Checkbox size={"small"}  checked={task.isDone}/>
                                     <span>{task.title}</span>
                                     <ButtonTemplate title={"x"} onClickHandler={() => deleteTasks(task.id)}/>
 
                                 </li>
                             )
                         })}
-                    </ul>
+                    </List>
                 )}
 
             <div>
-                <ButtonTemplate title={"All"} onClickHandler={()=>changeToDoListFilter("All")}/>
-                <ButtonTemplate title={"Active"} onClickHandler={()=>changeToDoListFilter("Active")}/>
-                <ButtonTemplate title={"Completed"} onClickHandler={()=>changeToDoListFilter("Completed")}/>
+                <Button
+                onClick={()=>changeToDoListFilter("All")}
+                >
+
+                </Button>
+                {/*<ButtonTemplate title={"All"} onClickHandler={()=>changeToDoListFilter("All")}/>*/}
+                {/*<ButtonTemplate title={"Active"} onClickHandler={()=>changeToDoListFilter("Active")}/>*/}
+                {/*<ButtonTemplate title={"Completed"} onClickHandler={()=>changeToDoListFilter("Completed")}/>*/}
             </div>
         </div>)
 }

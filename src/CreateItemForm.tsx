@@ -1,18 +1,19 @@
-import {ButtonTemplate} from "./Button.tsx";
+// import {ButtonTemplate} from "./Button.tsx";
 import {ChangeEvent, KeyboardEvent, useState} from "react";
+import {IconButton, TextField} from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 
-type Props={
-    createItem:(newItemTitle:string)=>void
+type Props = {
+    createItem: (newItemTitle: string) => void
     maxItemTitleLength: number
 }
 
 
-export const CreateItemForm = ({createItem, maxItemTitleLength}:Props) => {
+export const CreateItemForm = ({createItem, maxItemTitleLength}: Props) => {
 
     const [taskTitle, setTaskTitle] = useState("")
 
     const [error, setError] = useState(false)
-
 
 
     const IsAddTaskPossible = taskTitle !== "" && taskTitle.length <= 15
@@ -40,17 +41,25 @@ export const CreateItemForm = ({createItem, maxItemTitleLength}:Props) => {
 
     return (
         <div>
-            <input
+            <TextField
                 value={taskTitle}
-                className={error ? "error" : ""}
+                size={"small"}
+                variant={"outlined"}
+                error={error}
+                helperText={error && "Enter valid title"}
                 placeholder={`Max ${maxItemTitleLength} charters`}
                 onChange={onChangeTaskTitleHandler}
                 onKeyDown={onKeyDownCreateTaskHandler}
             />
 
-            <ButtonTemplate title={"+"}
+            <IconButton size={"small"}
+                        onClick={() => createTaskHandler()}>
+                <AddIcon/>
+            </IconButton>
+
+            {/*<ButtonTemplate title={"+"}
                             disabled={!IsAddTaskPossible}
-                            onClickHandler={() => createTaskHandler()}/>
+                            onClickHandler={() => createTaskHandler()}/>*/}
 
             {taskTitle && taskTitle.length < maxItemTitleLength &&
                 <div>rest {maxItemTitleLength - taskTitle.length}</div>}

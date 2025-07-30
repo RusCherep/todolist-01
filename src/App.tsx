@@ -3,6 +3,16 @@ import {useState} from "react";
 import {v1} from "uuid";
 import {Task, ToDoList} from "./ToDoListOnChange.tsx";
 import {CreateItemForm} from "./CreateItemForm.tsx";
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import MenuIcon from '@mui/icons-material/Menu'
+import {Box, Container, CssBaseline, Grid, Paper, Switch} from "@mui/material";
+import {containerSX} from "./ToDoListOnChange.style.ts";
+import {NavButton} from "./NavButton.ts";
+import {createTheme, ThemeProvider} from "@mui/material";
+import {green, orange} from "@mui/material/colors";
+
 
 export type FilterValues = "All" | "Active" | "Completed"
 
@@ -129,6 +139,16 @@ export function App() {
 
 
     //UI - read
+    const [isDarkMode, setIsDarkMode] = useState(false)
+    const theme = createTheme(
+        {
+            palette: {
+                primary: orange,
+                secondary: green,
+                mode: isDarkMode ? "dark" : "light"
+            },
+        }
+    )
 
     const todolistsComponents = todoLists.map(tl => {
         let filteredTasks = tasks[tl.id];
@@ -140,30 +160,55 @@ export function App() {
             filteredTasks = tasks[tl.id].filter(t => t.isDone)
         }
 
-        return (<ToDoList
-            key={tl.id}
-            tasks={filteredTasks}
-            title={tl.title}
-            filter={tl.filter}
-            todolistId={tl.id}
-            deleteTasks={deleteTasks}
-            deleteTodolist={deleteTodolist}
-            changeToDoListFilter={changeToDoListFilter}
-            changeTaskTitle={changeTaskTitle}
-            changeToDoListTitle={changeToDoListTitle}
-            createTask={createTask}
-            changeTaskStatus={changeTaskStatus}
-            // deleteAllTasks={deleteAllTasks}
-        />)
+        return (
+            <Grid key={tl.id}>
+                <Paper elevation={6} sx={{p: "15px"}}>
+                    <ToDoList
+                        tasks={filteredTasks}
+                        title={tl.title}
+                        filter={tl.filter}
+                        todolistId={tl.id}
+                        deleteTasks={deleteTasks}
+                        deleteTodolist={deleteTodolist}
+                        changeToDoListFilter={changeToDoListFilter}
+                        changeTaskTitle={changeTaskTitle}
+                        changeToDoListTitle={changeToDoListTitle}
+                        createTask={createTask}
+                        changeTaskStatus={changeTaskStatus}
+                        // deleteAllTasks={deleteAllTasks}
+                    />
+                </Paper>
+            </Grid>)
 
     })
 
 
     return (
         <div className="app">
-
-            <CreateItemForm createItem={createTodolist} maxItemTitleLength={15}/>
-            {todolistsComponents}
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <AppBar position="static">
+                    <Toolbar sx={containerSX}>
+                        <IconButton color="inherit">
+                            <MenuIcon/>
+                        </IconButton>
+                        <Box>
+                            <NavButton color="inherit">Sign in</NavButton>
+                            <NavButton color="inherit">Sign up</NavButton>
+                            <NavButton color="inherit" background={theme.palette.secondary.main}>Faq</NavButton>
+                            <Switch onChange={()=>setIsDarkMode(!isDarkMode)}/>
+                        </Box>
+                    </Toolbar>
+                </AppBar>
+                <Container maxWidth={"lg"}>
+                    <Grid container sx={{p: "10px 0", justifyContent: "center"}}>
+                        <CreateItemForm createItem={createTodolist} maxItemTitleLength={15}/>
+                    </Grid>
+                    <Grid container spacing={5}>
+                        {todolistsComponents}
+                    </Grid>
+                </Container>
+            </ThemeProvider>
         </div>
     )
 }
